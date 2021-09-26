@@ -53,6 +53,7 @@
   let shuffled = [];
   let clicked = [];
   let completed = [];
+  let clickable = false;
 
   function shuffle() { // 피셔-예이츠 셔플
     for (let i = 0; colorCopy.length > 0; i += 1) {
@@ -78,6 +79,9 @@
   }
 
   function onClickCard() {
+    if (!clickable || completed.includes(this) || clicked[0] === this) {
+      return;
+    }
     this.classList.toggle('flipped');
     clicked.push(this);
     if (clicked.length !== 2) {
@@ -99,10 +103,12 @@
       return;
     }
     // 두 카드가 다르면
+    clickable = false;
     setTimeout(()=> {
       clicked[0].classList.remove('flipped');
       clicked[1].classList.remove('flipped');
       clicked = [];
+      clickable = true;
     }, 500);
   }
 
@@ -124,6 +130,7 @@
       document.querySelectorAll('.card').forEach((card) => {
         card.classList.remove('flipped');
       });
+      clickable = true;
     }, 5000);
   }
 
@@ -132,6 +139,7 @@
     colorCopy = colors.concat(colors);
     shuffled = [];
     completed = [];
+    clickable = false;
     startGame();
   }
   startGame();
